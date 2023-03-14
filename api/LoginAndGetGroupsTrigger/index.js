@@ -1,42 +1,11 @@
-const crypto = require('crypto');
 const fs = require('fs').promises;
 const path = require('path');
 const process = require('process');
 const os = require('os');
 const {Auth, google} = require('googleapis');
+const checkLogin = require('../shared/checkLogin.js');
+const authorizeForGoogle = require('../shared/authorizeForGoogle.js');
 
-const checkLogin = (username, password) => {
-    const passwordHashed = crypto.createHash('sha256').update(password, 'utf8').digest().toString('base64');
-    const logins = JSON.parse(process.env.LOGINS);
-    for (let login of logins) {
-        if (login.username === username && login.passwordHash === passwordHashed) {
-            return login;
-        }
-    }
-    return null;
-};
-
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
-
-/**
- * Load or request or authorization to call APIs.
- *
- */
-async function authorizeForGoogle(context) {
-    await fs.writeFile(path.join(os.tmpdir(), "keyfile.json"), process.env.SERVICE_ACCOUNT_KEY);
-
-    const auth = new Auth.GoogleAuth({
-        keyFile: path.join(os.tmpdir(), "keyfile.json"),
-        scopes: SCOPES
-    });
-
-    const client = await auth.getClient();
-
-    context.log('Client is ' + client);
-    context.log(client);
-
-    return client;
-  }
 
 module.exports = async function (context, req) {
     try {
@@ -75,7 +44,8 @@ module.exports = async function (context, req) {
     
         context.res = {
             body: {
-                sheets: allowedSheets
+                sheets: allowedSheets,
+                withCommonCode: true
             }
         };
     } catch (err) {
