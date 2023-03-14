@@ -27,6 +27,8 @@ module.exports = async function (context, req) {
     }
 
     context.res = {
-        body: login.sheets
+        body: {
+            sheets: login.sheets
+        }
     };
 }
