@@ -148,6 +148,27 @@ const showMembers = async () => {
     membersEl.style.display = "block";
 };
 
+const sendSMS = () => {
+    const groupNameElement = document.querySelector('.members .group-name');
+    if (!groupNameElement || !groupNameElement.value) {
+        alert('Veuillez sélectionner un groupe.');
+        return;
+    }
+    const userNameInput = document.querySelector('#username');
+    if (!userNameInput || !userNameInput.value) {
+        alert('Veuillez entrer votre nom d\'utilisateur.');
+        return;
+    }
+    const passwordInput = document.querySelector('#password');
+    if (!passwordInput || !passwordInput.value) {
+        alert('Veuillez entrer votre mot de passe');
+        return;
+    }
+    const textareaEl = document.querySelector('.message');
+    alert('Sending message ' + textareaEl.value);
+
+};
+
 const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
 if (loginAndGetGroupsButton) {
     loginAndGetGroupsButton.addEventListener('click', loginAndGetGroups);
@@ -156,4 +177,9 @@ if (loginAndGetGroupsButton) {
 const showMembersButton = document.querySelector('#show-members');
 if (showMembersButton) {
     showMembersButton.addEventListener('click', showMembers);
+}
+
+const sendSmsButton = document.querySelector('#send-sms');
+if (sendSmsButton) {
+    sendSmsButton.addEventListener('click', sendSMS);
 }
