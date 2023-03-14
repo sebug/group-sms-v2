@@ -17,6 +17,7 @@ const sendSMS = async (member, message, context) => {
         };
     } catch (err) {
         context.log(err);
+        context.log('Node version is ' + process.version);
         return {
             member: member,
             result: 'erreur d\'envoi'
