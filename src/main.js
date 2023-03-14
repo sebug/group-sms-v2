@@ -168,7 +168,7 @@ const sendSMS = () => {
     const trs = document.querySelectorAll('.members tbody tr');
     const confirmation = confirm('Êtes-vous sûr de vouloir envoyer ce message à ' +
     trs.length + ' membres: "' +
-    + textareaEl.value + '"?');
+    textareaEl.value + '"?');
 };
 
 const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
