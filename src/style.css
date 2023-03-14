@@ -2,6 +2,6 @@ body {
     font-family: sans-serif;
 }
 
-.logged-in, .select-group {
+.logged-in, .select-group, .members {
     display: none;
 }

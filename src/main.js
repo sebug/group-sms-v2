@@ -74,7 +74,86 @@ const loginAndGetGroups = async () => {
     showGroupDropdown(responseGroups.sheets);
 };
 
+const showMembers = async () => {
+    const selectElement = document.querySelector('.select-group select');
+    if (!selectElement || !selectElement.value) {
+        alert('Veuillez sélectionner un groupe.');
+    }
+    const userNameInput = document.querySelector('#username');
+    if (!userNameInput || !userNameInput.value) {
+        alert('Veuillez entrer votre nom d\'utilisateur.');
+        return;
+    }
+    const passwordInput = document.querySelector('#password');
+    if (!passwordInput || !passwordInput.value) {
+        alert('Veuillez entrer votre mot de passe');
+        return;
+    }
+    const getMembersResponse = await fetch('/api/GetMembersTrigger', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: userNameInput.value,
+            password: passwordInput.value,
+            group: selectElement.value
+        })
+    });
+    if (getMembersResponse.status !== 200) {
+        alert("Erreur de recherche des membres");
+        return;
+    }
+    const members = await getMembersResponse.json();
+    console.log(members);
+    if (!members || !members.members) {
+        return;
+    }
+    const membersEl = document.querySelector('.members');
+    if (!membersEl) {
+        return;
+    }
+    const groupNameEl = membersEl.querySelector('.group-name');
+    if (!groupNameEl) {
+        return;
+    }
+    groupNameEl.innerHTML = selectElement.value;
+
+    const table = membersEl.querySelector('table');
+    if (!table) {
+        return;
+    }
+
+    const tbody = table.querySelector('tbody');
+    tbody.innerHTML = '';
+
+    for (const member of members.members) {
+        const tr = document.createElement('tr');
+
+        const firstNameTd = document.createElement('td');
+        firstNameTd.innerHTML = member.firstName;
+        tr.appendChild(firstNameTd);
+
+        const lastNameTd = document.createElement('td');
+        lastNameTd.innerHTML = member.lastName;
+        tr.appendChild(lastNameTd);
+
+        const phoneNumberTd = document.createElement('td');
+        phoneNumberTd.innerHTML = member.phoneNumber || '';
+        tr.appendChild(phoneNumberTd);
+
+        tbody.appendChild(tr);
+    }
+
+    membersEl.style.display = "block";
+};
+
 const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
 if (loginAndGetGroupsButton) {
     loginAndGetGroupsButton.addEventListener('click', loginAndGetGroups);
+}
+
+const showMembersButton = document.querySelector('#show-members');
+if (showMembersButton) {
+    showMembersButton.addEventListener('click', showMembers);
 }
