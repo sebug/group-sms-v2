@@ -150,7 +150,7 @@ const showMembers = async () => {
 
 const sendSMS = () => {
     const groupNameElement = document.querySelector('.members .group-name');
-    if (!groupNameElement || !groupNameElement.value) {
+    if (!groupNameElement || !groupNameElement.innerHTML) {
         alert('Veuillez sélectionner un groupe.');
         return;
     }
@@ -165,7 +165,7 @@ const sendSMS = () => {
         return;
     }
     const textareaEl = document.querySelector('.message');
-    alert('Sending message ' + textareaEl.value);
+    alert('Sending message ' + textareaEl.innerHTML);
 
 };
 
