@@ -10,6 +10,7 @@ const authorizeForGoogle = require('../shared/authorizeForGoogle.js');
 const sendSMS = async (member, message, context) => {
     try {
         context.log('Message sent to ' + member.phoneNumber + ': ' + message);
+        context.log('Fetch is ' + fetch);
         return {
             member: member,
             result: 'envoyé'
