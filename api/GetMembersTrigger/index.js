@@ -51,6 +51,23 @@ module.exports = async function (context, req) {
                 memberLookup[member.firstName + " " + member.lastName] = member;
             }
         }
+
+        const firstSheet = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.SHEET_ID,
+            range: process.env.PHONE_NUMBERS_TAB_NAME + '!A2:C',
+        });
+
+        for (const row of firstSheet.data.values) {
+            if (row[0] && row[1] && row[2]) {
+                const phoneNumber = row[2];
+                const firstName = row[0];
+                const lastName = row[1];
+                const member = memberLookup[firstName + " " + lastName];
+                if (member) {
+                    member.phoneNumber = phoneNumber;
+                }
+            }
+        }
     
         context.res = {
             // status: 200, /* Defaults to 200 */
