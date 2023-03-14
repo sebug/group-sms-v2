@@ -148,7 +148,7 @@ const showMembers = async () => {
     membersEl.style.display = "block";
 };
 
-const sendSMS = () => {
+const sendSMS = async () => {
     const groupNameElement = document.querySelector('.members .group-name');
     if (!groupNameElement || !groupNameElement.innerHTML) {
         alert('Veuillez sélectionner un groupe.');
@@ -169,6 +169,52 @@ const sendSMS = () => {
     const confirmation = confirm('Êtes-vous sûr de vouloir envoyer ce message à ' +
     trs.length + ' membres: "' +
     textareaEl.value + '"?');
+    if (!confirmation) {
+        return;
+    }
+    const sendSMSResponse = await fetch('/api/SendSMSTrigger', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: userNameInput.value,
+            password: passwordInput.value,
+            group: groupNameElement.innerHTML,
+            message: textareaEl.value
+        })
+    });
+    if (sendSMSResponse.status !== 200) {
+        alert('Erreur d\'envoi des SMS');
+    }
+    const sendResponse = await sendSMSResponse.json();
+    if (!sendResponse || !sendResponse.sendResults) {
+        return;
+    }
+    const sendResultsEl = document.querySelector('.send-results');
+    if (!sendResultsEl) {
+        return;
+    }
+    const ul = sendResultsEl.querySelector('ul');
+    if (!ul) {
+        return;
+    }
+    ul.innerHTML = '';
+
+    for (const sendResult of sendResponse.sendResults) {
+        const li = document.createElement('li');
+        li.innerHTML = sendResult.member.firstName + ' ' + sendResult.member.lastName + ': ' + sendResult.result;
+        if (sendResult.result != 'envoyé') {
+            li.style.color = 'red';
+        } else {
+            li.style.color = 'green';
+        }
+        ul.appendChild(li);
+    }
+
+    sendResultsEl.style.display = "block";
+    const membersElement = document.querySelector('.members');
+    membersElement.style.display = "none";
 };
 
 const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
