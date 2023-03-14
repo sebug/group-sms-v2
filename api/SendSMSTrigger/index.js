@@ -9,11 +9,30 @@ const authorizeForGoogle = require('../shared/authorizeForGoogle.js');
 
 const sendSMS = async (member, message, context) => {
     try {
+        const urlToSendTo = 'https://url.ecall.ch/api/sms?username=' +
+        encodeURIComponent(process.env.ECALL_USERNAME) + '&password=' +
+        encodeURIComponent(process.env.ECALL_PASSWORD) + '&address=' +
+        encodeURIComponent(member.phoneNumber.replaceAll(' ', '')) + '&message=' +
+        encodeURIComponent(message);
+        context.log('URL to call: ' + urlToSendTo);
         context.log('Message sent to ' + member.phoneNumber + ': ' + message);
-        context.log('Fetch is ' + fetch);
+        const sendResponse = await fetch(urlToSendTo);
+        if (sendResponse.status !== 200) {
+            const errorMessage = await sendResponse.text();
+            context.log('Error sending to ' + member.phoneNumber + ': ' + errorMessage + ' ' + sendResponse.status);
+            return {
+                member: member,
+                result: 'erreur d\'envoi',
+                responseText: errorMessage,
+                status: sendResponse.status
+            };
+        }
+        const responseText = await sendResponse.text();
         return {
             member: member,
-            result: 'envoyé'
+            result: 'envoyé',
+            responseText: responseText,
+            status: sendResponse.status
         };
     } catch (err) {
         context.log(err);
