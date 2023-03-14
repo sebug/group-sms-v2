@@ -165,7 +165,7 @@ const sendSMS = () => {
         return;
     }
     const textareaEl = document.querySelector('.message');
-    alert('Sending message ' + textareaEl.innerHTML);
+    alert('Sending message ' + textareaEl.value);
 
 };
 
