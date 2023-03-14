@@ -65,7 +65,7 @@ module.exports = async function (context, req) {
 
         const allowedSheets = [];
         for (const sheetInfo of res.data.sheets) {
-            if (loginSheets.filter(s => s === 'all' || s === sheetInfo.properties.title)) {
+            if (loginSheets.filter(s => s === 'all' || s === sheetInfo.properties.title).length) {
                 allowedSheets.push({
                     sheetId: sheetInfo.properties.sheetId,
                     title: sheetInfo.properties.title
