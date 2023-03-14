@@ -1,3 +1,26 @@
+const showLoggedIn = (userName) => {
+    const loggedInSection = document.querySelector('.logged-in');
+    if (!loggedInSection) {
+        return;
+    }
+    const userNameLoggedInElement = document.querySelector('.logged-in .logged-in-username');
+    if (userNameLoggedInElement) {
+        userNameLoggedInElement.innerHTML = userName;
+    }
+
+    loggedInSection.style.display = "";
+};
+
+const hideLogin = () => {
+    const loginSection = document.querySelector('.login');
+
+    if (!loginSection) {
+        return;
+    }
+
+    loginSection.style.display = "none";
+};
+
 const loginAndGetGroups = async () => {
     const userNameInput = document.querySelector('#username');
     if (!userNameInput || !userNameInput.value) {
@@ -24,7 +47,8 @@ const loginAndGetGroups = async () => {
         return;
     }
     const responseGroups = await loginResponse.json();
-    console.log(responseGroups);
+    hideLogin();
+    showLoggedIn(userNameInput.value);
 };
 
 const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
