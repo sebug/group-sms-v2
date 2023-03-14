@@ -71,7 +71,7 @@ const loginAndGetGroups = async () => {
     const responseGroups = await loginResponse.json();
     hideLogin();
     showLoggedIn(userNameInput.value);
-    showGroupDropdown(responseGroups);
+    showGroupDropdown(responseGroups.sheets);
 };
 
 const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
