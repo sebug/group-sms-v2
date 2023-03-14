@@ -8,7 +8,7 @@ const showLoggedIn = (userName) => {
         userNameLoggedInElement.innerHTML = userName;
     }
 
-    loggedInSection.style.display = "";
+    loggedInSection.style.display = "block";
 };
 
 const hideLogin = () => {
@@ -19,6 +19,28 @@ const hideLogin = () => {
     }
 
     loginSection.style.display = "none";
+};
+
+const showGroupDropdown = (sheets) => {
+    const showGroupSection = document.querySelector('.select-group');
+    if (!showGroupSection) {
+        return;
+    }
+
+    const selectEl = showGroupSection.querySelector('select');
+    if (!selectEl) {
+        return;
+    }
+
+    selectEl.innerHTML = '';
+    for (const sheet of sheets) {
+        const opt = document.createElement('option');
+        opt.setAttribute('value', sheet.title);
+        opt.innerHTML = sheet.title;
+        selectEl.appendChild(opt);
+    }
+
+    showGroupSection.style.display = "block";
 };
 
 const loginAndGetGroups = async () => {
@@ -49,6 +71,7 @@ const loginAndGetGroups = async () => {
     const responseGroups = await loginResponse.json();
     hideLogin();
     showLoggedIn(userNameInput.value);
+    showGroupDropdown(responseGroups);
 };
 
 const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
