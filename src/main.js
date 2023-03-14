@@ -146,6 +146,11 @@ const showMembers = async () => {
     }
 
     membersEl.style.display = "block";
+
+    const sendResultsEl = document.querySelector('.send-results');
+    if (sendResultsEl) {
+        sendResultsEl.style.display = 'none';
+    }
 };
 
 const sendSMS = async () => {
