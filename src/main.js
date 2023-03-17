@@ -28,7 +28,7 @@ const showLogin = () => {
         return;
     }
 
-    loginSection.style.display = "none";
+    loginSection.style.display = "block";
 };
 
 const hideLoadingGroups = () => {
@@ -48,7 +48,7 @@ const showLoadingGroups = () => {
         return;
     }
 
-    loadingGroupsSection.style.display = "none";
+    loadingGroupsSection.style.display = "block";
 };
 
 const showGroupDropdown = (sheets) => {
