@@ -2,7 +2,7 @@ body {
     font-family: sans-serif;
 }
 
-.logged-in, .select-group, .members, .send-results {
+.logged-in, .select-group, .members, .send-results, .loading-groups {
     display: none;
 }
 

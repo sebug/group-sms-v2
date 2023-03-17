@@ -21,6 +21,36 @@ const hideLogin = () => {
     loginSection.style.display = "none";
 };
 
+const showLogin = () => {
+    const loginSection = document.querySelector('.login');
+
+    if (!loginSection) {
+        return;
+    }
+
+    loginSection.style.display = "none";
+};
+
+const hideLoadingGroups = () => {
+    const loadingGroupsSection = document.querySelector('.loading-groups');
+
+    if (!loadingGroupsSection) {
+        return;
+    }
+
+    loadingGroupsSection.style.display = "none";
+};
+
+const showLoadingGroups = () => {
+    const loadingGroupsSection = document.querySelector('.loading-groups');
+
+    if (!loadingGroupsSection) {
+        return;
+    }
+
+    loadingGroupsSection.style.display = "none";
+};
+
 const showGroupDropdown = (sheets) => {
     const showGroupSection = document.querySelector('.select-group');
     if (!showGroupSection) {
@@ -54,6 +84,8 @@ const loginAndGetGroups = async () => {
         alert('Veuillez entrer votre mot de passe');
         return;
     }
+    hideLogin();
+    showLoadingGroups();
     const loginResponse = await fetch('/api/LoginAndGetGroupsTrigger', {
         method: 'POST',
         headers: {
@@ -64,12 +96,13 @@ const loginAndGetGroups = async () => {
             password: passwordInput.value
         })
     });
+    hideLoadingGroups();
     if (loginResponse.status !== 200) {
         alert("Erreur de login");
+        showLogin();
         return;
     }
     const responseGroups = await loginResponse.json();
-    hideLogin();
     showLoggedIn(userNameInput.value);
     showGroupDropdown(responseGroups.sheets);
 };
