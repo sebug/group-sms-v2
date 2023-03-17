@@ -222,9 +222,12 @@ const sendSMS = async () => {
     membersElement.style.display = "none";
 };
 
-const loginAndGetGroupsButton = document.querySelector('#login-and-get-groups');
-if (loginAndGetGroupsButton) {
-    loginAndGetGroupsButton.addEventListener('click', loginAndGetGroups);
+const loginForm = document.querySelector('#login-form');
+if (loginForm) {
+    loginForm.addEventListener('submit', (ev) => {
+        loginAndGetGroups();
+        ev.preventDefault();
+    });
 }
 
 const showMembersButton = document.querySelector('#show-members');

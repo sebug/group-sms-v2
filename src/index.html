@@ -14,9 +14,11 @@
         <h3>Envoyer un message</h1>
         <main>
             <section class="login">
-                <p><label>Nom d'utilisateur: <input id="username" /></label></p>
-                <p><label>Mot de passe: <input id="password" type="password" /></label></p>
-                <button id="login-and-get-groups">Se loguer</button>
+                <form id="login-form">
+                    <p><label>Nom d'utilisateur: <input id="username" /></label></p>
+                    <p><label>Mot de passe: <input id="password" type="password" /></label></p>
+                    <button id="login-and-get-groups" type="submit">Se loguer</button>
+                </form>
             </section>
             <section class="logged-in">
                 <p>Logué en tant que <span class="logged-in-username"></span></p>
