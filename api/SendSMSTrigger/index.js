@@ -9,31 +9,50 @@ const authorizeForGoogle = require('../shared/authorizeForGoogle.js');
 
 const sendSMS = async (member, message, context) => {
     try {
-        const urlToSendTo = 'https://url.ecall.ch/api/sms?username=' +
-        encodeURIComponent(process.env.ECALL_USERNAME) + '&password=' +
-        encodeURIComponent(process.env.ECALL_PASSWORD) + '&address=' +
-        encodeURIComponent(member.phoneNumber.replaceAll(' ', '')) + '&message=' +
-        encodeURIComponent(message);
-        context.log('URL to call: ' + urlToSendTo);
-        context.log('Message sent to ' + member.phoneNumber + ': ' + message);
-        const sendResponse = await fetch(urlToSendTo);
-        if (sendResponse.status !== 200) {
-            const errorMessage = await sendResponse.text();
-            context.log('Error sending to ' + member.phoneNumber + ': ' + errorMessage + ' ' + sendResponse.status);
+        if (process.env.USE_SWISSCOM_SMS === 'true') {
+            const requestBody = {
+                to: member.phoneNumber.replaceAll(' ', ''),
+                text: message
+            };
+            await fetch('https://api.swisscom.com/messaging/sms', { method: 'POST', headers: {
+                'client_id': process.env.SWISSCOM_CLIENT_ID,
+                'SCS-Version': '2', 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody) });
+            const responseText = await sendResponse.text();
             return {
                 member: member,
-                result: 'erreur d\'envoi',
-                responseText: errorMessage,
+                result: 'envoyé',
+                responseText: responseText,
+                status: sendResponse.status
+            };
+        } else {
+            const urlToSendTo = 'https://url.ecall.ch/api/sms?username=' +
+            encodeURIComponent(process.env.ECALL_USERNAME) + '&password=' +
+            encodeURIComponent(process.env.ECALL_PASSWORD) + '&address=' +
+            encodeURIComponent(member.phoneNumber.replaceAll(' ', '')) + '&message=' +
+            encodeURIComponent(message);
+            context.log('URL to call: ' + urlToSendTo);
+            context.log('Message sent to ' + member.phoneNumber + ': ' + message);
+            const sendResponse = await fetch(urlToSendTo);
+            if (sendResponse.status !== 200) {
+                const errorMessage = await sendResponse.text();
+                context.log('Error sending to ' + member.phoneNumber + ': ' + errorMessage + ' ' + sendResponse.status);
+                return {
+                    member: member,
+                    result: 'erreur d\'envoi',
+                    responseText: errorMessage,
+                    status: sendResponse.status
+                };
+            }
+            const responseText = await sendResponse.text();
+            return {
+                member: member,
+                result: 'envoyé',
+                responseText: responseText,
                 status: sendResponse.status
             };
         }
-        const responseText = await sendResponse.text();
-        return {
-            member: member,
-            result: 'envoyé',
-            responseText: responseText,
-            status: sendResponse.status
-        };
+        
     } catch (err) {
         context.log(err);
         context.log('Node version is ' + process.version);
