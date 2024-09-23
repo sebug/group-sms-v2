@@ -14,7 +14,7 @@ const sendSMS = async (member, message, context) => {
                 to: member.phoneNumber.replaceAll(' ', ''),
                 text: message
             };
-            await fetch('https://api.swisscom.com/messaging/sms', { method: 'POST', headers: {
+            const sendResponse = await fetch('https://api.swisscom.com/messaging/sms', { method: 'POST', headers: {
                 'client_id': process.env.SWISSCOM_CLIENT_ID,
                 'SCS-Version': '2', 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody) });
