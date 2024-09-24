@@ -156,5 +156,6 @@ function cleanupName(name) {
     if (!name) {
         return '';
     }
-    return name.toUpperCase().replaceAll('Ö','OE').replaceAll('É','E');
+    return name.toUpperCase().replaceAll('Ö','OE').replaceAll('É','E')
+    .replaceAll('Ë','E');
 }
