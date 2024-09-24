@@ -106,6 +106,9 @@ module.exports = async function (context, req) {
                 };
                 members.push(member);
                 memberLookup[member.firstName + " " + member.lastName] = member;
+                if (member.firstName && member.lastName) {
+                    memberLookup[member.firstName.toUpperCase() + " " + member.lastName.toUpperCase()] = member;
+                }
             }
         }
 
@@ -119,7 +122,7 @@ module.exports = async function (context, req) {
                 const phoneNumber = row[2];
                 const firstName = row[0];
                 const lastName = row[1];
-                const member = memberLookup[firstName + " " + lastName];
+                const member = memberLookup[firstName.toUpperCase() + " " + lastName.toUpperCase()];
                 if (member) {
                     member.phoneNumber = phoneNumber;
                 }
