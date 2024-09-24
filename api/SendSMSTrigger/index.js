@@ -107,7 +107,7 @@ module.exports = async function (context, req) {
                 members.push(member);
                 memberLookup[member.firstName + " " + member.lastName] = member;
                 if (member.firstName && member.lastName) {
-                    memberLookup[member.firstName.toUpperCase() + " " + member.lastName.toUpperCase()] = member;
+                    memberLookup[cleanupName(member.firstName) + " " + cleanupName(member.lastName)] = member;
                 }
             }
         }
@@ -122,7 +122,7 @@ module.exports = async function (context, req) {
                 const phoneNumber = row[2];
                 const firstName = row[0];
                 const lastName = row[1];
-                const member = memberLookup[firstName.toUpperCase() + " " + lastName.toUpperCase()];
+                const member = memberLookup[cleanupName(firstName) + " " + cleanupName(lastName)];
                 if (member) {
                     member.phoneNumber = phoneNumber;
                 }
@@ -150,4 +150,11 @@ module.exports = async function (context, req) {
             body: '' + err
         };
     }
+}
+
+function cleanupName(name) {
+    if (!name) {
+        return '';
+    }
+    return name.toUpperCase().replaceAll('Ö','OE').replaceAll('É','E');
 }
